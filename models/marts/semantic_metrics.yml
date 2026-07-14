@@ -1,0 +1,42 @@
+metrics:
+  - name: revenue_per_customer
+    description: Gross revenue divided by customer count.
+    label: Revenue per Customer
+    type: ratio
+    numerator: gross_revenue
+    denominator: customer_count
+
+  - name: gross_revenue_30d
+    description: Trailing 30 day gross revenue.
+    label: Gross Revenue 30D
+    type: cumulative
+    input_metric: gross_revenue
+    window: 30 days
+
+  - name: food_revenue_share
+    description: Share of revenue that comes from food items.
+    label: Food Revenue Share
+    type: ratio
+    numerator: food_revenue
+    denominator: gross_revenue
+
+  - name: customer_lifetime_value_minus_tax
+    description: Customer lifetime spend net of lifetime tax paid.
+    label: Customer Lifetime Value Minus Tax
+    type: derived
+    expr: spend - tax
+    input_metrics:
+      - name: customer_lifetime_spend
+        alias: spend
+      - name: customer_lifetime_tax_paid
+        alias: tax
+
+  - name: customer_to_order_item_conversion_30d
+    description: Example conversion metric from customer creation cohort to first observed order-item activity within 30 days.
+    label: Customer to Order Item Conversion 30D
+    type: conversion
+    entity: customer
+    calculation: conversion_rate
+    base_metric: customer_count
+    conversion_metric: ordering_customer_count
+    window: 30 days
