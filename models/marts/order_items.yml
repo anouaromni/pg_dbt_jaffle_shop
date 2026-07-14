@@ -1,16 +1,106 @@
 models:
   - name: order_items
+    description: Line-item fact table for ordered products, with product attributes, supply cost, and customer context.
+    semantic_model:
+      enabled: true
+      name: order_item
+    agg_time_dimension: order_date
     columns:
       - name: order_item_id
         data_tests:
           - not_null
           - unique
+        entity:
+          type: primary
+          name: order_item
+
       - name: order_id
         data_tests:
           - relationships:
               arguments:
                 to: ref('orders')
                 field: order_id
+        entity:
+          type: foreign
+          name: order_entity
+
+      - name: customer_id
+        entity:
+          type: foreign
+          name: customer
+
+      - name: product_id
+        entity:
+          type: foreign
+          name: product
+
+      - name: order_date
+        granularity: day
+        dimension:
+          type: time
+          name: order_date
+
+      - name: product_name
+        dimension:
+          type: categorical
+
+      - name: is_food_item
+        dimension:
+          type: categorical
+
+      - name: is_drink_item
+        dimension:
+          type: categorical
+
+    metrics:
+      - name: order_item_count
+        description: Count of order item rows.
+        label: Order Item Count
+        type: simple
+        agg: count
+        expr: 1
+
+      - name: gross_revenue
+        description: Sum of product prices across all order items.
+        label: Gross Revenue
+        type: simple
+        agg: sum
+        expr: product_price
+
+      - name: food_revenue
+        description: Revenue from food items only.
+        label: Food Revenue
+        type: simple
+        agg: sum
+        expr: product_price
+        filter: |
+          {{ Dimension('order_item__is_food_item') }} = True
+
+      - name: supply_cost_total
+        description: Sum of supply cost allocated to ordered items.
+        label: Supply Cost Total
+        type: simple
+        agg: sum
+        expr: supply_cost
+
+      - name: ordering_customer_count
+        description: Distinct customers who purchased an order item.
+        label: Ordering Customer Count
+        type: simple
+        agg: count_distinct
+        expr: customer_id
+
+      - name: gross_profit
+        description: Gross revenue less supply cost.
+        label: Gross Profit
+        type: derived
+        expr: revenue - cost
+        input_metrics:
+          - name: gross_revenue
+            alias: revenue
+          - name: supply_cost_total
+            alias: cost
+
 unit_tests:
   - name: test_supply_costs_sum_correctly
     description: "Test that the counts of drinks and food orders convert to booleans properly."
@@ -32,10 +122,10 @@ unit_tests:
           - {order_id: 2, product_id: 2}
       - input: ref('stg_orders')
         rows:
-          - {order_id: 1}
-          - {order_id: 2}
+          - {order_id: 1, customer_id: 1}
+          - {order_id: 2, customer_id: 2}
     expect:
       rows:
-        - {order_id: 1, product_id: 1, supply_cost: 4.50}
-        - {order_id: 2, product_id: 2, supply_cost: 8.50}
-        - {order_id: 2, product_id: 2, supply_cost: 8.50}
+        - {order_id: 1, product_id: 1, customer_id: 1, supply_cost: 4.50}
+        - {order_id: 2, product_id: 2, customer_id: 2, supply_cost: 8.50}
+        - {order_id: 2, product_id: 2, customer_id: 2, supply_cost: 8.50}
