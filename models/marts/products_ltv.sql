@@ -1,7 +1,9 @@
-SELECT "omni_dbt__products"."PRODUCT_ID",
-    COALESCE(SUM("omni_dbt__order_items"."PRODUCT_PRICE"), 0) AS "GROSS_REVENUE",
-    COALESCE(SUM("omni_dbt__order_items"."PRODUCT_PRICE"), 0) - COALESCE(SUM("omni_dbt__order_items"."SUPPLY_COST"), 0) AS "GROSS_PROFIT",
-    COALESCE(SUM("omni_dbt__order_items"."SUPPLY_COST"), 0) AS "SUPPLY_COST_TOTAL"
-FROM {{ref('order_items')}} AS "omni_dbt__order_items"
-    LEFT JOIN {{ref('products')}} AS "omni_dbt__products" ON "omni_dbt__order_items"."PRODUCT_ID" = "omni_dbt__products"."PRODUCT_ID"
-GROUP BY 1
+select
+    products.product_id,
+    coalesce(sum(order_items.product_price), 0) as gross_revenue,
+    coalesce(sum(order_items.product_price), 0) - coalesce(sum(order_items.supply_cost), 0) as gross_profit,
+    coalesce(sum(order_items.supply_cost), 0) as supply_cost_total
+from {{ ref('order_items') }} as order_items
+left join {{ ref('products') }} as products
+    on order_items.product_id = products.product_id
+group by 1
