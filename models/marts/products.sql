@@ -8,8 +8,10 @@ products as (
 
 select
     product_id,
-    product_name_changed,
+    product_name as product_name_changed,
+    product_type,
     product_description,
-    price,
-    created_at
+    product_price,
+    is_food_item,
+    is_drink_item
 from products
