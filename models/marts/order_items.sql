@@ -47,7 +47,7 @@ joined as (
         orders.order_date,
 
         products.product_name,
-        products.product_price,
+        products.product_price*10,
         products.is_food_item,
         products.is_drink_item,
 
