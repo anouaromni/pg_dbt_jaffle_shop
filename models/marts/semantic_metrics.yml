@@ -31,6 +31,20 @@ metrics:
       - name: customer_lifetime_tax_paid
         alias: tax
 
+
+  - name: gross_revenue_plus_supply_cost
+    description: Combined gross revenue and total supply cost from semantic models with no shared entity.
+    label: Gross Revenue Plus Supply Cost
+
+    type: derived
+    expr: revenue + supply_cost
+    input_metrics:
+      - name: gross_revenue
+        alias: revenue
+      - name: total_supply_cost
+        alias: supply_cost
+
+
   - name: customer_to_order_item_conversion_30d
     description: Example conversion metric from customer creation cohort to first observed order-item activity within 30 days.
     label: Customer to Order Item Conversion 30D
