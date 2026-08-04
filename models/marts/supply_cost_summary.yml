@@ -1,0 +1,28 @@
+models:
+  - name: supply_cost_summary
+    description: One-row summary of all recorded supply costs. It has no entities; reporting_date is a fixed date because the source has no event date.
+    semantic_model:
+      enabled: true
+      name: supply_cost_summary
+    agg_time_dimension: reporting_date
+    columns:
+      - name: supply_cost_summary_id
+        description: Synthetic key for the single-row summary; it does not relate to another semantic model.
+        entity:
+          type: primary
+          name: supply_cost_summary
+      - name: reporting_date
+        description: Fixed reporting date used only to satisfy Semantic Layer aggregation-time requirements.
+        granularity: day
+        dimension:
+          type: time
+
+      - name: total_supply_cost
+        description: Total cost of all recorded supply rows.
+    metrics:
+      - name: total_supply_cost
+        description: Total recorded supply cost across the independent supply-cost summary.
+        label: Total Supply Cost
+        type: simple
+        agg: sum
+        expr: total_supply_cost
