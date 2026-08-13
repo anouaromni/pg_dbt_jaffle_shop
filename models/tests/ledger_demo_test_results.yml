@@ -1,0 +1,22 @@
+models:
+  - name: ledger_demo_test_results
+    description: Append-only audit history of randomized ledger data-test outcomes.
+    columns:
+      - name: test_name
+        description: Name of the singular ledger data test.
+        data_tests:
+          - not_null
+      - name: passed
+        description: Test outcome, where 1 represents passed and 0 represents failed.
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+                quote: false
+      - name: evaluated_at
+        description: Timestamp at which the randomized result was generated.
+      - name: invocation_id
+        description: dbt invocation ID for this recorded test result.
+        data_tests:
+          - not_null
