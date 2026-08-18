@@ -1,0 +1,6 @@
+models:
+  - name: semantic_order_items
+    description: >-
+      Example Snowflake semantic view over the order-item mart. It demonstrates
+      row-level facts, calculated dimensions, additive and average aggregates,
+      distinct counts, conditional metrics, and a ratio metric.
