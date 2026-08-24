@@ -51,7 +51,9 @@ joined as (
         products.is_food_item,
         products.is_drink_item,
 
-        order_supplies_summary.supply_cost
+        order_supplies_summary.supply_cost,
+
+        'dummy_value_1' as new_column
 
     from order_items
 

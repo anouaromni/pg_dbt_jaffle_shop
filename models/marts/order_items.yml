@@ -52,6 +52,13 @@ models:
         dimension:
           type: categorical
 
+
+      - name: dummy_column_1
+        description: Placeholder text field added for testing.
+
+      - name: dummy_column_2
+        description: Placeholder text field added for testing.
+
     metrics:
       - name: order_item_count
         description: Count of order item rows.
