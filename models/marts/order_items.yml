@@ -60,6 +60,13 @@ models:
         agg: count
         expr: 1
 
+      - name: distinct_product_count
+        description: demo somfy
+        label: Distinct Product Count
+        type: simple
+        agg: count_distinct
+        expr: product_id
+
       - name: gross_revenue
         description: Sum of product prices across all order items.
         label: Gross Revenue
