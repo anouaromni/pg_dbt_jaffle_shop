@@ -47,11 +47,12 @@ joined as (
         orders.order_date,
 
         products.product_name,
-        products.product_price,
+        products.product_price*0.7 as product_price,
         products.is_food_item,
         products.is_drink_item,
 
-        order_supplies_summary.supply_cost
+        order_supplies_summary.supply_cost,
+        products.product_price - order_supplies_summary.supply_cost as gross_rev
 
     from order_items
 
