@@ -1,0 +1,36 @@
+models:
+  - name: fct_example
+    description: Example fact table exposing the order_items mart under the fct_ naming convention. One row per order item.
+    columns:
+      - name: order_item_id
+        description: The unique key of this fact table, one row per ordered item.
+        data_tests:
+          - not_null
+          - unique
+
+      - name: order_id
+        description: Foreign key to the order this item belongs to.
+
+      - name: product_id
+        description: Foreign key to the product that was ordered.
+
+      - name: customer_id
+        description: Foreign key to the customer who placed the order.
+
+      - name: order_date
+        description: The date the order containing this item was placed.
+
+      - name: product_name
+        description: The name of the ordered product.
+
+      - name: product_price
+        description: The price of the ordered product at the time of sale.
+
+      - name: is_food_item
+        description: Boolean flag indicating whether the ordered product is a food item.
+
+      - name: is_drink_item
+        description: Boolean flag indicating whether the ordered product is a drink item.
+
+      - name: supply_cost
+        description: Total supply cost allocated to the product on this order item.
